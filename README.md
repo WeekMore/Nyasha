@@ -1,2 +1,2 @@
 # Nyasha
-A Minecraft Fabric Hack Mod for learning programing
+A Minecraft Fabric Hack Mod for learning programing。
