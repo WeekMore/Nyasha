@@ -25,7 +25,6 @@ class Windows(
 ): AbstractButton(name,xPos,yPos, width, height) {
 
 
-    //val arrowPic = Identifier.of("yolbi4","texture/clickgui/arrow.png")
     var themeColor = Color(156,121,232)
 
     val animation: Animation = Animation(Easing.EASE_OUT_CIRC,500)
