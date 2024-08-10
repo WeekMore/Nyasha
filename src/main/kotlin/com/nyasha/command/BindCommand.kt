@@ -1,25 +1,20 @@
 package com.nyasha.command
 
-import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.nyasha.managers.ModuleManager
 import com.nyasha.module.Bind
-import com.nyasha.module.BindSetting
 import com.nyasha.module.BindType
-import com.sun.jna.platform.KeyboardUtils
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
-import net.minecraft.client.Keyboard
-import org.lwjgl.glfw.GLFW
 
 /**
  * @author yuxiangll
  * @since 2024/8/10 下午6:29
  * IntelliJ IDEA
  */
-object BindCommand : Command("bind","set module's keybinding") {
+object BindCommand : Command("bind","set module's keybinding (bindType: pre, post, hold)") {
 
 
 
