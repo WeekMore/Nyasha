@@ -1,187 +1,165 @@
-package com.nyasha.util.math;
+package com.nyasha.util.math
 
-import com.nyasha.util.IMinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import com.nyasha.util.IMinecraftClient
+import net.minecraft.entity.Entity
+import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.Vec3d
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.math.acos
+import kotlin.math.floor
+import kotlin.math.min
+import kotlin.math.sqrt
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-
-
-@SuppressWarnings("All")
-public final class MathUtility implements IMinecraftClient {
-    public static double random(double min, double max) {
-        return ThreadLocalRandom.current().nextDouble() * (max - min) + min;
+object MathUtility : IMinecraftClient {
+    fun random(min: Double, max: Double): Double {
+        return ThreadLocalRandom.current().nextDouble() * (max - min) + min
     }
 
-    public static float random(float min, float max) {
-        return (float) (Math.random() * (max - min) + min);
+    fun random(min: Float, max: Float): Float {
+        return (Math.random() * (max - min) + min).toFloat()
     }
 
-    public static double getDistanceSq(double x, double y, double z) {
-        double d0 = mc.player.getX() - x;
-        double d1 = mc.player.getY() - y;
-        double d2 = mc.player.getZ() - z;
-        return d0 * d0 + d1 * d1 + d2 * d2;
+    fun getDistanceSq(x: Double, y: Double, z: Double): Double {
+        val d0 = IMinecraftClient.mc.player!!.x - x
+        val d1 = IMinecraftClient.mc.player!!.y - y
+        val d2 = IMinecraftClient.mc.player!!.z - z
+        return d0 * d0 + d1 * d1 + d2 * d2
     }
 
-    public static double getDistance(double x1, double y1, double z1, double x2, double y2, double z2) {
-        double d0 = (x1 - x2);
-        double d1 = (y1 - y2);
-        double d2 = (z1 - z2);
-        return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+    fun getDistance(x1: Double, y1: Double, z1: Double, x2: Double, y2: Double, z2: Double): Double {
+        val d0 = (x1 - x2)
+        val d1 = (y1 - y2)
+        val d2 = (z1 - z2)
+        return sqrt(d0 * d0 + d1 * d1 + d2 * d2)
     }
 
-    public static double getSqrDistance(double x1, double y1, double z1, double x2, double y2, double z2) {
-        double d0 = (x1 - x2);
-        double d1 = (y1 - y2);
-        double d2 = (z1 - z2);
-        return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+    fun getSqrDistance(x1: Double, y1: Double, z1: Double, x2: Double, y2: Double, z2: Double): Double {
+        val d0 = (x1 - x2)
+        val d1 = (y1 - y2)
+        val d2 = (z1 - z2)
+        return sqrt(d0 * d0 + d1 * d1 + d2 * d2)
     }
 
-    public static float round(float value) {
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.floatValue();
+    fun round(value: Float): Float {
+        var bd = BigDecimal(value.toDouble())
+        bd = bd.setScale(2, RoundingMode.HALF_UP)
+        return bd.toFloat()
     }
 
-    public static double getDistanceSq(Entity ent) {
-        return getDistanceSq(ent.getX(), ent.getY(), ent.getZ());
+    fun getDistanceSq(ent: Entity): Double {
+        return getDistanceSq(ent.x, ent.y, ent.z)
     }
 
-    public static double roundToDecimal(double n, int point) {
-        if (point == 0) {
-            return java.lang.Math.floor(n);
-        }
-        double factor = java.lang.Math.pow(10, point);
-        return java.lang.Math.round(n * factor) / factor;
-    }
+    fun angle(vec3d: Vec3d, other: Vec3d): Double {
+        val lengthSq = vec3d.length() * other.length()
 
-    public static double angle(Vec3d vec3d, Vec3d other) {
-        double lengthSq = vec3d.length() * other.length();
-
-        if (lengthSq < 1.0E-4D) {
-            return 0.0;
+        if (lengthSq < 1.0E-4) {
+            return 0.0
         }
 
-        double dot = vec3d.dotProduct(other);
-        double arg = dot / lengthSq;
+        val dot = vec3d.dotProduct(other)
+        val arg = dot / lengthSq
 
         if (arg > 1) {
-            return 0.0;
+            return 0.0
         } else if (arg < -1) {
-            return 180.0;
+            return 180.0
         }
 
-        return Math.acos(arg) * 180.0f / Math.PI;
+        return acos(arg) * 180.0f / Math.PI
     }
 
-    public static Vec3d fromTo(Vec3d from, double x, double y, double z) {
-        return fromTo(from.x, from.y, from.z, x, y, z);
+    fun fromTo(from: Vec3d, x: Double, y: Double, z: Double): Vec3d {
+        return fromTo(from.x, from.y, from.z, x, y, z)
     }
 
-    public static float lerp(float f, float st, float en) {
-        return st + f * (en - st);
+    fun lerp(f: Float, st: Float, en: Float): Float {
+        return st + f * (en - st)
     }
 
-    public static Vec3d fromTo(double x, double y, double z, double x2, double y2, double z2) {
-        return new Vec3d(x2 - x, y2 - y, z2 - z);
+    fun fromTo(x: Double, y: Double, z: Double, x2: Double, y2: Double, z2: Double): Vec3d {
+        return Vec3d(x2 - x, y2 - y, z2 - z)
     }
 
-    public static float rad(float angle) {
-        return (float) (angle * Math.PI / 180);
+    fun rad(angle: Float): Float {
+        return (angle * Math.PI / 180).toFloat()
     }
 
-    public static int clamp(int num, int min, int max) {
-        return num < min ? min : Math.min(num, max);
+    fun clamp(num: Int, min: Int, max: Int): Int {
+        return if (num < min) min else min(num.toDouble(), max.toDouble()).toInt()
     }
 
-    public static float clamp(float num, float min, float max) {
-        return num < min ? min : Math.min(num, max);
+    fun clamp(num: Float, min: Float, max: Float): Float {
+        return if (num < min) min else min(num.toDouble(), max.toDouble()).toFloat()
     }
 
-    public static double clamp(double num, double min, double max) {
-        return num < min ? min : Math.min(num, max);
+    fun clamp(num: Double, min: Double, max: Double): Double {
+        return if (num < min) min else min(num, max)
     }
 
-    public static float sin(float value) {
-        return MathHelper.sin(value);
+    fun sin(value: Float): Float {
+        return MathHelper.sin(value)
     }
 
-    public static float cos(float value) {
-        return MathHelper.cos(value);
+    fun cos(value: Float): Float {
+        return MathHelper.cos(value)
     }
 
-    public static float wrapDegrees(float value) {
-        return MathHelper.wrapDegrees(value);
+    fun wrapDegrees(value: Float): Float {
+        return MathHelper.wrapDegrees(value)
     }
 
-    public static double wrapDegrees(double value) {
-        return MathHelper.wrapDegrees(value);
+    fun wrapDegrees(value: Double): Double {
+        return MathHelper.wrapDegrees(value)
     }
 
-    public static double square(double input) {
-        return input * input;
+    fun square(input: Double): Double {
+        return input * input
     }
 
-    public static double round(double value, int places) {
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+    fun round(value: Double, places: Int): Double {
+        var bd = BigDecimal.valueOf(value)
+        bd = bd.setScale(places, RoundingMode.HALF_UP)
+        return bd.toDouble()
     }
 
-    public static float wrap(float valI) {
-        float val = valI % 360.0f;
-        if (val >= 180.0f) {
-            val -= 360.0f;
+    fun wrap(valI: Float): Float {
+        var `val` = valI % 360.0f
+        if (`val` >= 180.0f) {
+            `val` -= 360.0f
         }
-        if (val < -180.0f) {
-            val += 360.0f;
+        if (`val` < -180.0f) {
+            `val` += 360.0f
         }
-        return val;
+        return `val`
     }
 
-    public static Vec3d direction(float yaw) {
-        return new Vec3d(Math.cos(MathUtility.degToRad(yaw + 90.0f)), 0.0, Math.sin(MathUtility.degToRad(yaw + 90.0f)));
+    fun direction(yaw: Float): Vec3d {
+        return Vec3d(
+            kotlin.math.cos(degToRad((yaw + 90.0f).toDouble())),
+            0.0,
+            kotlin.math.sin(degToRad((yaw + 90.0f).toDouble()))
+        )
     }
 
-    public static float round(float value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.FLOOR);
-        return bd.floatValue();
+    fun round(value: Float, places: Int): Float {
+        require(places >= 0)
+        var bd = BigDecimal.valueOf(value.toDouble())
+        bd = bd.setScale(places, RoundingMode.FLOOR)
+        return bd.toFloat()
     }
 
-    public static float round2(double value) {
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.floatValue();
+    fun round2(value: Double): Float {
+        var bd = BigDecimal(value)
+        bd = bd.setScale(2, RoundingMode.HALF_UP)
+        return bd.toFloat()
     }
 
 
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map, boolean descending) {
-        LinkedList<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
-        if (descending) {
-            list.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-        } else {
-            list.sort(Map.Entry.comparingByValue());
-        }
-        LinkedHashMap result = new LinkedHashMap();
-        for (Map.Entry entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
-
-    public static double degToRad(double deg) {
-        return deg * 0.01745329238474369;
+    fun degToRad(deg: Double): Double {
+        return deg * 0.01745329238474369
     }
 }

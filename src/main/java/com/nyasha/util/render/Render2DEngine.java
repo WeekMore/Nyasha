@@ -106,7 +106,7 @@ public class Render2DEngine implements IMinecraftClient {
 
     public static void addWindow(MatrixStack stack, float x, float y, float x1, float y1, double animation_factor) {
         float h = y + y1;
-        float h2 = (float) (h * (1d - MathUtility.clamp(animation_factor, 0, 1.0025f)));
+        float h2 = (float) (h * (1d - MathUtility.INSTANCE.clamp(animation_factor, 0, 1.0025f)));
 
         float x3 = x;
         float y3 = y + h2;
@@ -434,7 +434,7 @@ public class Render2DEngine implements IMinecraftClient {
 
     public static void drawDefaultArrow(MatrixStack matrices, float x, float y, float size, float tracerWidth, float downHeight, boolean down, boolean glow, int color) {
         if (glow)
-            Render2DEngine.drawBlurredShadow(matrices, x - size * tracerWidth, y, (x + size * tracerWidth) - (x - size * tracerWidth), size, 10, ColorUtility.injectAlpha(new Color(color), 140));
+            Render2DEngine.drawBlurredShadow(matrices, x - size * tracerWidth, y, (x + size * tracerWidth) - (x - size * tracerWidth), size, 10, ColorUtility.INSTANCE.injectAlpha(new Color(color), 140));
 
         matrices.push();
         setupRender();
@@ -446,14 +446,14 @@ public class Render2DEngine implements IMinecraftClient {
         bufferBuilder.vertex(matrix, (x - size * tracerWidth), (y + size), 0.0F).color(color);
         bufferBuilder.vertex(matrix, x, (y + size - downHeight), 0.0F).color(color);
         bufferBuilder.vertex(matrix, x, y, 0.0F).color(color);
-        color = ColorUtility.darker(new Color(color), 0.8f).getRGB();
+        color = ColorUtility.INSTANCE.darker(new Color(color), 0.8f).getRGB();
         bufferBuilder.vertex(matrix, x, y, 0.0F).color(color);
         bufferBuilder.vertex(matrix, x, (y + size - downHeight), 0.0F).color(color);
         bufferBuilder.vertex(matrix, (x + size * tracerWidth), (y + size), 0.0F).color(color);
         bufferBuilder.vertex(matrix, x, y, 0.0F).color(color);
 
         if (down) {
-            color = ColorUtility.darker(new Color(color), 0.6f).getRGB();
+            color = ColorUtility.INSTANCE.darker(new Color(color), 0.6f).getRGB();
             bufferBuilder.vertex(matrix, (x - size * tracerWidth), (y + size), 0.0F).color(color);
             bufferBuilder.vertex(matrix, (x + size * tracerWidth), (y + size), 0.0F).color(color);
             bufferBuilder.vertex(matrix, x, (y + size - downHeight), 0.0F).color(color);
