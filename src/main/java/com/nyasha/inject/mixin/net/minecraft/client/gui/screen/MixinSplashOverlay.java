@@ -1,7 +1,7 @@
 package com.nyasha.inject.mixin.net.minecraft.client.gui.screen;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.nyasha.util.IMinecraftClient;
+import com.nyasha.util.IMinecraftMixin;
 import com.nyasha.util.render.Render2DEngine;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  */
 
 @Mixin(SplashOverlay.class)
-public abstract class MixinSplashOverlay implements IMinecraftClient {
+public abstract class MixinSplashOverlay implements IMinecraftMixin {
     @Final
     @Shadow
     private boolean reloading;
@@ -89,7 +89,7 @@ public abstract class MixinSplashOverlay implements IMinecraftClient {
 
 
         float width = mc.getWindow().getScaledWidth()*(1-progress);
-        Render2DEngine.drawRound(context.getMatrices(), (float) mc.getWindow().getScaledWidth() /2-width/2, (float) mc.getWindow().getScaledHeight() /2,width,5F,2F, new Color(255,255,255,(int)(255*(1-progress))));
+        Render2DEngine.INSTANCE.drawRound(context.getMatrices(), (float) mc.getWindow().getScaledWidth() /2-width/2, (float) mc.getWindow().getScaledHeight() /2,width,5F,2F, new Color(255,255,255,(int)(255*(1-progress))));
         float t = this.reload.getProgress();
         this.progress = MathHelper.clamp(this.progress * 0.95F + t * 0.050000012F, 0.0F, 1.0F);
 

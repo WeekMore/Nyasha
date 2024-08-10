@@ -1,6 +1,6 @@
 package com.nyasha.util.math
 
-import com.nyasha.util.IMinecraftClient
+import com.nyasha.util.IMinecraft
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
@@ -13,7 +13,7 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.sqrt
 
-object MathUtility : IMinecraftClient {
+object MathUtility : IMinecraft {
     fun random(min: Double, max: Double): Double {
         return ThreadLocalRandom.current().nextDouble() * (max - min) + min
     }
@@ -23,9 +23,9 @@ object MathUtility : IMinecraftClient {
     }
 
     fun getDistanceSq(x: Double, y: Double, z: Double): Double {
-        val d0 = IMinecraftClient.mc.player!!.x - x
-        val d1 = IMinecraftClient.mc.player!!.y - y
-        val d2 = IMinecraftClient.mc.player!!.z - z
+        val d0 = mc.player!!.x - x
+        val d1 = mc.player!!.y - y
+        val d2 = mc.player!!.z - z
         return d0 * d0 + d1 * d1 + d2 * d2
     }
 

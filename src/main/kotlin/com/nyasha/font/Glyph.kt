@@ -1,4 +1,4 @@
-package com.nyasha.font;
+package com.nyasha.font
 
-record Glyph(int u, int v, int width, int height, char value, GlyphMap owner) {
-}
+
+internal data class Glyph(val u: Int, val v: Int, val width: Int, val height: Int, val value: Char, val owner: GlyphMap)

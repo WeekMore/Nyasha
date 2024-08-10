@@ -5,8 +5,8 @@ import com.nyasha.Nyasha;
 import com.nyasha.events.EventPlayerJump;
 import com.nyasha.events.EventPlayerTravel;
 import com.nyasha.events.EventPostAttack;
+import com.nyasha.util.IMinecraftMixin;
 import com.nyasha.module.imp.combat.Reach;
-import com.nyasha.util.IMinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * IntelliJ IDEA
  */
 @Mixin(PlayerEntity.class)
-public abstract class MixinPlayerEntity extends LivingEntity implements IMinecraftClient {
+public abstract class MixinPlayerEntity extends LivingEntity implements IMinecraftMixin {
 
     protected MixinPlayerEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);

@@ -1,148 +1,160 @@
-package com.nyasha.util.render;
+package com.nyasha.util.render
 
-import org.jetbrains.annotations.NotNull;
+import java.awt.image.BufferedImage
+import java.awt.image.ColorModel
+import java.awt.image.Kernel
+import kotlin.math.ceil
+import kotlin.math.exp
+import kotlin.math.min
+import kotlin.math.sqrt
 
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.Kernel;
+class GaussianFilter(private var radius: Float) {
+    private var kernel: Kernel? = null
 
-public class GaussianFilter {
-    protected float radius;
-    protected Kernel kernel;
-
-    public GaussianFilter(float radius) {
-        setRadius(radius);
-    }
-
-    public static void convolveAndTranspose(@NotNull Kernel kernel, int[] inPixels, int[] outPixels, int width, int height, boolean alpha, boolean premultiply, boolean unpremultiply, int edgeAction) {
-        float[] matrix = kernel.getKernelData(null);
-        int cols = kernel.getWidth();
-        int cols2 = cols / 2;
-        for (int y = 0; y < height; y++) {
-            int index = y;
-            int ioffset = y * width;
-            for (int x = 0; x < width; x++) {
-                float r = 0.0F, g = 0.0F, b = 0.0F, a = 0.0F;
-                int moffset = cols2;
-                for (int col = -cols2; col <= cols2; col++) {
-                    float f = matrix[moffset + col];
-                    if (f != 0.0F) {
-                        int ix = x + col;
-                        if (ix < 0) {
-                            if (edgeAction == 1) {
-                                ix = 0;
-                            } else if (edgeAction == 2) {
-                                ix = (x + width) % width;
-                            }
-
-                        } else if (ix >= width) {
-                            if (edgeAction == 1) {
-                                ix = width - 1;
-                            } else if (edgeAction == 2) {
-                                ix = (x + width) % width;
-                            }
-                        }
-
-                        int rgb = inPixels[ioffset + ix];
-                        int pa = rgb >> 24 & 0xFF;
-                        int pr = rgb >> 16 & 0xFF;
-                        int pg = rgb >> 8 & 0xFF;
-                        int pb = rgb & 0xFF;
-
-                        if (premultiply) {
-                            float a255 = pa * 0.003921569F;
-                            pr = (int) (pr * a255);
-                            pg = (int) (pg * a255);
-                            pb = (int) (pb * a255);
-                        }
-
-                        a += f * pa;
-                        r += f * pr;
-                        g += f * pg;
-                        b += f * pb;
-                    }
-                }
-
-                if (unpremultiply && a != 0.0F && a != 255.0F) {
-                    float f = 255.0F / a;
-                    r *= f;
-                    g *= f;
-                    b *= f;
-                }
-
-                int ia = alpha ? clamp((int) (a + 0.5D)) : 255;
-                int ir = clamp((int) (r + 0.5D));
-                int ig = clamp((int) (g + 0.5D));
-                int ib = clamp((int) (b + 0.5D));
-                outPixels[index] = ia << 24 | ir << 16 | ig << 8 | ib;
-                index += height;
-            }
-        }
-    }
-
-    public static int clamp(int c) {
-        if (c < 0) return 0;
-        return Math.min(c, 255);
-    }
-
-    public static Kernel makeKernel(float radius) {
-        int r = (int) Math.ceil(radius);
-        int rows = r * 2 + 1;
-        float[] matrix = new float[rows];
-        float sigma = radius / 3.0F;
-        float sigma22 = 2.0F * sigma * sigma;
-        float sigmaPi2 = 6.2831855F * sigma;
-        float sqrtSigmaPi2 = (float) Math.sqrt(sigmaPi2);
-        float radius2 = radius * radius;
-        float total = 0.0F;
-        int index = 0;
-        for (int row = -r; row <= r; row++) {
-            float distance = (row * row);
-            if (distance > radius2) {
-                matrix[index] = 0.0F;
-            } else {
-                matrix[index] = (float) Math.exp((-distance / sigma22)) / sqrtSigmaPi2;
-            }
-            total += matrix[index];
-            index++;
-        }
-        for (int i = 0; i < rows; i++) {
-            matrix[i] = matrix[i] / total;
-        }
-        return new Kernel(rows, 1, matrix);
-    }
-
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-        this.kernel = makeKernel(radius);
-    }
-
-    public BufferedImage filter(BufferedImage src, BufferedImage dst) {
-        int width = src.getWidth();
-        int height = src.getHeight();
+    fun filter(src: BufferedImage, dst: BufferedImage?): BufferedImage? {
+        var dst = dst
+        val width = src.width
+        val height = src.height
         if (dst == null) {
-            dst = createCompatibleDestImage(src, null);
+            dst = createCompatibleDestImage(src, null)
         }
-        int[] inPixels = new int[width * height];
-        int[] outPixels = new int[width * height];
-        src.getRGB(0, 0, width, height, inPixels, 0, width);
-        if (this.radius > 0.0F) {
-            convolveAndTranspose(this.kernel, inPixels, outPixels, width, height, true, true, false, 1);
-            convolveAndTranspose(this.kernel, outPixels, inPixels, height, width, true, false, true, 1);
+        val inPixels = IntArray(width * height)
+        val outPixels = IntArray(width * height)
+        src.getRGB(0, 0, width, height, inPixels, 0, width)
+        if (this.radius > 0.0f) {
+            convolveAndTranspose(kernel!!, inPixels, outPixels, width, height, true, true, false, 1)
+            convolveAndTranspose(kernel!!, outPixels, inPixels, height, width, true, false, true, 1)
         }
-        dst.setRGB(0, 0, width, height, inPixels, 0, width);
-        return dst;
+        dst.setRGB(0, 0, width, height, inPixels, 0, width)
+        return dst
     }
 
-    public BufferedImage createCompatibleDestImage(BufferedImage src, ColorModel dstCM) {
+    fun createCompatibleDestImage(src: BufferedImage, dstCM: ColorModel?): BufferedImage {
+        var dstCM = dstCM
         if (dstCM == null) {
-            dstCM = src.getColorModel();
+            dstCM = src.colorModel
         }
-        return new BufferedImage(dstCM, dstCM.createCompatibleWritableRaster(src.getWidth(), src.getHeight()), dstCM.isAlphaPremultiplied(), null);
+        return BufferedImage(
+            dstCM,
+            dstCM!!.createCompatibleWritableRaster(src.width, src.height),
+            dstCM.isAlphaPremultiplied,
+            null
+        )
     }
 
-    public String toString() {
-        return "Blur/Gaussian Blur...";
+    override fun toString(): String {
+        return "Blur/Gaussian Blur..."
+    }
+
+    companion object {
+        fun convolveAndTranspose(
+            kernel: Kernel,
+            inPixels: IntArray,
+            outPixels: IntArray,
+            width: Int,
+            height: Int,
+            alpha: Boolean,
+            premultiply: Boolean,
+            unpremultiply: Boolean,
+            edgeAction: Int
+        ) {
+            val matrix = kernel.getKernelData(null)
+            val cols = kernel.width
+            val cols2 = cols / 2
+            for (y in 0 until height) {
+                var index = y
+                val ioffset = y * width
+                for (x in 0 until width) {
+                    var r = 0.0f
+                    var g = 0.0f
+                    var b = 0.0f
+                    var a = 0.0f
+                    val moffset = cols2
+                    for (col in -cols2..cols2) {
+                        val f = matrix[moffset + col]
+                        if (f != 0.0f) {
+                            var ix = x + col
+                            if (ix < 0) {
+                                if (edgeAction == 1) {
+                                    ix = 0
+                                } else if (edgeAction == 2) {
+                                    ix = (x + width) % width
+                                }
+                            } else if (ix >= width) {
+                                if (edgeAction == 1) {
+                                    ix = width - 1
+                                } else if (edgeAction == 2) {
+                                    ix = (x + width) % width
+                                }
+                            }
+
+                            val rgb = inPixels[ioffset + ix]
+                            val pa = rgb shr 24 and 0xFF
+                            var pr = rgb shr 16 and 0xFF
+                            var pg = rgb shr 8 and 0xFF
+                            var pb = rgb and 0xFF
+
+                            if (premultiply) {
+                                val a255 = pa * 0.003921569f
+                                pr = (pr * a255).toInt()
+                                pg = (pg * a255).toInt()
+                                pb = (pb * a255).toInt()
+                            }
+
+                            a += f * pa
+                            r += f * pr
+                            g += f * pg
+                            b += f * pb
+                        }
+                    }
+
+                    if (unpremultiply && a != 0.0f && a != 255.0f) {
+                        val f = 255.0f / a
+                        r *= f
+                        g *= f
+                        b *= f
+                    }
+
+                    val ia = if (alpha) clamp((a + 0.5).toInt()) else 255
+                    val ir = clamp((r + 0.5).toInt())
+                    val ig = clamp((g + 0.5).toInt())
+                    val ib = clamp((b + 0.5).toInt())
+                    outPixels[index] = ia shl 24 or (ir shl 16) or (ig shl 8) or ib
+                    index += height
+                }
+            }
+        }
+
+        fun clamp(c: Int): Int {
+            if (c < 0) return 0
+            return min(c.toDouble(), 255.0).toInt()
+        }
+
+        fun makeKernel(radius: Float): Kernel {
+            val r = ceil(radius.toDouble()).toInt()
+            val rows = r * 2 + 1
+            val matrix = FloatArray(rows)
+            val sigma = radius / 3.0f
+            val sigma22 = 2.0f * sigma * sigma
+            val sigmaPi2 = 6.2831855f * sigma
+            val sqrtSigmaPi2 = sqrt(sigmaPi2.toDouble()).toFloat()
+            val radius2 = radius * radius
+            var total = 0.0f
+            var index = 0
+            for (row in -r..r) {
+                val distance = (row * row).toFloat()
+                if (distance > radius2) {
+                    matrix[index] = 0.0f
+                } else {
+                    matrix[index] = exp((-distance / sigma22).toDouble()).toFloat() / sqrtSigmaPi2
+                }
+                total += matrix[index]
+                index++
+            }
+            for (i in 0 until rows) {
+                matrix[i] = matrix[i] / total
+            }
+            return Kernel(rows, 1, matrix)
+        }
     }
 }

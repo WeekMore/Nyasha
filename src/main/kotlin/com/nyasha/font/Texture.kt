@@ -1,33 +1,29 @@
-package com.nyasha.font;
+package com.nyasha.font
 
-import net.minecraft.util.Identifier;
+import net.minecraft.util.Identifier
+import java.util.*
 
-public class Texture {
+class Texture {
+    val id: Identifier
 
-    final Identifier id;
-
-    public Texture(String path) {
-        id = Identifier.of("nyasha", validatePath(path));
+    constructor(path: String) {
+        id = Identifier.of("nyasha", validatePath(path))
     }
 
-    public Texture(Identifier i) {
-        id = Identifier.of(i.getNamespace(), i.getPath());
+    constructor(i: Identifier) {
+        id = Identifier.of(i.namespace, i.path)
     }
 
-     String validatePath(String path) {
+    private fun validatePath(path: String): String {
         if (Identifier.isPathValid(path)) {
-            return path;
+            return path
         }
-        StringBuilder ret = new StringBuilder();
-        for (char c : path.toLowerCase().toCharArray()) {
+        val ret = StringBuilder()
+        for (c in path.lowercase(Locale.getDefault()).toCharArray()) {
             if (Identifier.isPathCharacterValid(c)) {
-                ret.append(c);
+                ret.append(c)
             }
         }
-        return ret.toString();
-    }
-
-    public Identifier getId() {
-        return id;
+        return ret.toString()
     }
 }

@@ -5,7 +5,7 @@ import com.nyasha.Nyasha;
 import com.nyasha.events.EventPlayerMove;
 import com.nyasha.events.EventPostPlayerUpdate;
 import com.nyasha.events.EventPrePlayerUpdate;
-import com.nyasha.util.IMinecraftClient;
+import com.nyasha.util.IMinecraftMixin;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IMinecraftClient {
+public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity implements IMinecraftMixin {
 
 
     @Unique

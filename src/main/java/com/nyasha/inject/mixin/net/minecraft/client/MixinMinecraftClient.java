@@ -4,8 +4,8 @@ package com.nyasha.inject.mixin.net.minecraft.client;
 import com.nyasha.Nyasha;
 import com.nyasha.events.EventClientTick;
 import com.nyasha.events.EventPreAttack;
+import com.nyasha.util.IMinecraftMixin;
 import com.nyasha.managers.FontManager;
-import com.nyasha.util.IMinecraftClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Overlay;
@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 
 @Mixin(MinecraftClient.class)
-public abstract class MixinMinecraftClient implements IMinecraftClient {
+public abstract class MixinMinecraftClient implements IMinecraftMixin {
 
     @Shadow @Nullable public Screen currentScreen;
 

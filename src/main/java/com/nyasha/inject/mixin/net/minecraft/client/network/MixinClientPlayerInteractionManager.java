@@ -4,8 +4,8 @@ package com.nyasha.inject.mixin.net.minecraft.client.network;
 import com.nyasha.Nyasha;
 import com.nyasha.events.EventAttackBlock;
 import com.nyasha.events.EventBreakBlock;
+import com.nyasha.util.IMinecraftMixin;
 import com.nyasha.module.imp.player.NoBreakCooldown;
-import com.nyasha.util.IMinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(ClientPlayerInteractionManager.class)
-abstract public class MixinClientPlayerInteractionManager implements IMinecraftClient {
+abstract public class MixinClientPlayerInteractionManager implements IMinecraftMixin {
 
 
     @ModifyConstant(method = "updateBlockBreakingProgress",constant = @Constant(intValue = 5))
