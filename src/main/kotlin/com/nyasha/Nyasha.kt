@@ -1,15 +1,40 @@
 package com.nyasha
 
+import com.nyasha.managers.CommandManager
+import com.nyasha.managers.ModuleManager
+import com.nyasha.managers.SurveillanceManager
+import com.nyasha.util.render.Render2DEngine
+import meteordevelopment.orbit.EventBus
 import net.fabricmc.api.ModInitializer
 import org.slf4j.LoggerFactory
+import java.lang.invoke.MethodHandles
+import java.lang.reflect.Method
+
+
+
 
 object Nyasha : ModInitializer {
-    private val logger = LoggerFactory.getLogger("nyasha")
+    private val logger = LoggerFactory.getLogger("Nyasha")
+	val NAME = "Nyasha"
+	val VERSION = "4.0.0"
+
+	val EventBus = EventBus()
+
 
 	override fun onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-		logger.info("Hello Fabric world!")
+
+
+		EventBus.registerLambdaFactory( "com.nyasha") { lookupInMethod: Method, klass: Class<*> ->
+			lookupInMethod(null, klass, MethodHandles.lookup()) as MethodHandles.Lookup
+		}
+
+
+		logger.info("initializing managers")
+
+		ModuleManager.initialize()
+		SurveillanceManager.initialize()
+		CommandManager.initialize()
+		Render2DEngine.initShaders()
+
 	}
 }
