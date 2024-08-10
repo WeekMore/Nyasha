@@ -14,13 +14,23 @@ import java.util.Objects
  */
 @Suppress("MemberVisibilityCanBePrivate")
 object FontManager {
+
+
+    val pingFang10 by lazy {
+        creatFont("PingFang_Normal",10F)
+    }
+
     lateinit var pingFang22: FontRenderer;
     lateinit var pingFang16: FontRenderer;
+    lateinit var pingFang12: FontRenderer;
+
 
     @JvmStatic
     fun initialize() {
         pingFang22 = creatFont("PingFang_Normal",22F)
         pingFang16 = creatFont("PingFang_Normal",16F)
+        pingFang12 = creatFont("PingFang_Normal",12F)
+
     }
 
     private fun creatFont(name: String, size: Float): FontRenderer{

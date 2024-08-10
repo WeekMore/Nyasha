@@ -157,7 +157,9 @@ public class FontRenderer implements Closeable , IMinecraftClient {
     public void drawString(MatrixStack stack, String s, double x, double y, Color color) {
         drawString(stack, s, (float) x, (float) y, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha()/255f);
     }
-
+    public void drawString(MatrixStack stack, String s, float x, float y, Color color) {
+        drawString(stack, s, x, y, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha()/255f);
+    }
     public void drawString(MatrixStack stack, String s, float x, float y, float r, float g, float b, float a) {
         drawString(stack, s, x, y, r, g, b, a,  0);
     }

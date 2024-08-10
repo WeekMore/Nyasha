@@ -14,16 +14,18 @@ import org.lwjgl.glfw.GLFW
 object ClickGui : Module(
     "ClickGui",
     Category.RENDER,
-    Bind(GLFW.GLFW_KEY_RIGHT_SHIFT)
 ) {
 
+    init {
+
+        this.bind.value = Bind(GLFW.GLFW_KEY_RIGHT_SHIFT)
+
+    }
     var openned = false
 
     override fun onEnable() {
         if (!openned){
             openned = true
-            //mc.setScreen(ClickScreen)
-            //mc.player?.sendMessage(Text.of("开启clickgui"))
             mc.setScreen(ClickScreen)
         }
 

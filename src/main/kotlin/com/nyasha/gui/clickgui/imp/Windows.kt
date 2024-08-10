@@ -63,7 +63,19 @@ class Windows(
             }
 
             if (module.unfold){
-                Render2DEngine.drawRoundedBlur(context.matrices,xPos+4+width,yPos+20+index*18,width-4,15F,3F, Color(100,100,100),0F,0.6F)
+
+
+
+                module.settings.forEachIndexed{ ind, setting ->
+                    val yp = yPos+20+index*18 + ind*18 + 18
+                    Render2DEngine.drawRoundedBlur(context.matrices,xPos+4+width,yp,width-4,15F,0F, Color(100,100,100),0F,0.6F)
+                    FontManager.pingFang10.drawString(context.matrices,setting.name, xPos+4+width,yp+2,Color.WHITE)
+                }
+
+
+
+
+                //Render2DEngine.drawRoundedBlur(context.matrices,xPos+4+width,yPos+20+index*18,width-4,15F,3F, Color(100,100,100),0F,0.6F)
             }
             //RenderSystem.setShaderTexture(0,arrowPic)
 

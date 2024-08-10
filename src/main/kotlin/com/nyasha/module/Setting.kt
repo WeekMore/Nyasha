@@ -9,7 +9,7 @@ import java.awt.Color
  */
 
 
-sealed class Settings(val name: String, val description: String = "", val value: Any, val visible: ()->Boolean = { true })
+sealed class Settings(val name: String, val description: String = "", var value: Any, val visible: ()->Boolean = { true })
 
 class BindSetting(name: String, description: String = "", value: Bind, visible: () -> Boolean = { true }) : Settings(name,description,value,visible)
 
@@ -21,7 +21,7 @@ class NumberSetting(name: String, description: String = "",range: ClosedRange<*>
 
 class SingleModeSetting(name: String,description: String = "", )
 
-data class Bind(val key: Int, val type: BindType = BindType.PreClick)
+data class Bind(var key: Int, var type: BindType = BindType.PreClick)
 
 enum class BindType {
     PreClick,  // 0 按下切换

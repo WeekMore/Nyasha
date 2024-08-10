@@ -17,12 +17,11 @@ import net.minecraft.network.packet.Packet
 abstract class Module(
     val name: String,
     val category: Category,
-    key: Bind = Bind(0, BindType.PreClick),
 ) : IMinecraft {
 
     var enable: Boolean = false
     var prefix: String = ""
-    var bind: BindSetting = BindSetting(name,"Binding",key)
+    var bind: BindSetting = BindSetting(name,"Binding",Bind(0, BindType.PreClick))
     var unfold: Boolean = false
     val settings: MutableList<Settings> = mutableListOf()
 
