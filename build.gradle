@@ -54,6 +54,10 @@ dependencies {
 	modImplementation("org.ladysnake:satin:${project.satin_version}")
 
 
+	implementation files("libs/mcef-lib.jar")
+	//compileOnly ("libs/mcef-lib.jar")
+
+
 }
 
 processResources {

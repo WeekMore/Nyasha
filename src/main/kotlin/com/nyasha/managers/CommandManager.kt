@@ -1,9 +1,6 @@
 package com.nyasha.managers
 
-import com.nyasha.command.BindCommand
-import com.nyasha.command.Command
-import com.nyasha.command.HelpCommand
-import com.nyasha.command.ToggleCommand
+import com.nyasha.command.*
 
 
 /**
@@ -19,7 +16,7 @@ object CommandManager {
         commands.add(HelpCommand)
         commands.add(ToggleCommand)
         commands.add(BindCommand)
-
+        commands.add(SetCommand)
         commands.forEach { it.initializeCommand() }
     }
 

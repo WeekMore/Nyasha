@@ -1,5 +1,6 @@
 package com.nyasha.inject.mixin.net.minecraft.client.render;
 
+import com.nyasha.mcef.MCEF;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
 import org.objectweb.asm.Opcodes;
@@ -22,6 +23,15 @@ public abstract class MixinGameRenderer {
     void renderWorld(RenderTickCounter tickCounter, CallbackInfo ci) {
         //todo all undone
     }
+
+
+    @Inject(at = @At("HEAD"), method = "render")
+    public void preRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
+        if (MCEF.isInitialized()) {
+            MCEF.getApp().getHandle().N_DoMessageLoopWork();
+        }
+    }
+
 
 
 }

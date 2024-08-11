@@ -34,14 +34,12 @@ object BindCommand : Command("bind","set module's keybinding (bindType: pre, pos
                                         .executes {
                                             val type = StringArgumentType.getString(it, "BindType")
                                             val key = IntegerArgumentType.getInteger(it, "KeyCode")
-
                                             val castType = when(type.lowercase()){
                                                 "pre" -> BindType.PreClick
                                                 "post" -> BindType.PostClick
                                                 "hold" -> BindType.Hold
                                                 else -> BindType.PreClick
                                             }
-
                                             module.bind.value = Bind(key,castType)
                                             1
                                         }
@@ -56,6 +54,4 @@ object BindCommand : Command("bind","set module's keybinding (bindType: pre, pos
             })
         }
     }
-
-
 }

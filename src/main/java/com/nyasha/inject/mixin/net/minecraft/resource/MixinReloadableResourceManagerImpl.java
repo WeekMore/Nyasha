@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @Mixin(ReloadableResourceManagerImpl.class)
-public class MixinReloadableResourceManagerImpl {
+public abstract class MixinReloadableResourceManagerImpl {
 
     @ModifyArg(method = "reload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/SimpleResourceReload;start(Lnet/minecraft/resource/ResourceManager;Ljava/util/List;Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/concurrent/CompletableFuture;Z)Lnet/minecraft/resource/ResourceReload;"))
     private List<ResourceReloader> onReload(List<ResourceReloader> reloaders) {

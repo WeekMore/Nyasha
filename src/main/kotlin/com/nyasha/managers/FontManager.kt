@@ -34,6 +34,14 @@ object FontManager {
         creatFont(pingFang,12F)
     }
 
+    val conther16 by lazy {
+        creatFont("Conther",16F)
+    }
+
+
+
+
+
     @JvmStatic
     fun initialize() {
         pingFang = creatFontGroup("PingFang_Normal")
