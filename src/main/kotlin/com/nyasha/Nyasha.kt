@@ -16,7 +16,9 @@ import java.lang.reflect.Method
 object Nyasha : ModInitializer {
     private val logger = LoggerFactory.getLogger("Nyasha")
 	val NAME = "Nyasha"
-	val VERSION = "4.0.0"
+	val VERSION = "1.0.0"
+
+	var FirstTimeLoad = false
 
 	val EventBus = EventBus()
 

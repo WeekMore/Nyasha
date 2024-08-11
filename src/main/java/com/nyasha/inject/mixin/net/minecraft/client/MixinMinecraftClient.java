@@ -49,6 +49,8 @@ public abstract class MixinMinecraftClient implements IMinecraftMixin {
     public abstract void setScreen(@Nullable Screen screen);
 
 
+    @Shadow public abstract boolean isFinishedLoading();
+
     @Inject(at = @At("HEAD"), method = "setScreen", cancellable = true)
     public void redirScreen(Screen guiScreen, CallbackInfo ci) {
 
@@ -142,13 +144,18 @@ public abstract class MixinMinecraftClient implements IMinecraftMixin {
             // We always download the checksum for the java-cef build
             // We will compare this with mcef-libraries/<platform>.tar.gz.sha256
             // If the contents of the files differ (or it doesn't exist locally), we know we need to redownload JCEF
-            try {
-                downloadJcefBuild = !downloader.downloadJavaCefChecksum();
-            } catch (IOException e) {
-                e.printStackTrace();
-                MCEFDownloadListener.INSTANCE.setFailed(true);
-                return;
+            if (Nyasha.INSTANCE.getFirstTimeLoad()) {
+                try {
+                    downloadJcefBuild = !downloader.downloadJavaCefChecksum();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    MCEFDownloadListener.INSTANCE.setFailed(true);
+                    return;
+                }
+            }else {
+                downloadJcefBuild = false;
             }
+
 
             // Ensure the mcef-libraries directory exists
             // If not, we want to try redownloading

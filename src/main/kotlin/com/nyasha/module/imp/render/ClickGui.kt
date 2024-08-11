@@ -1,6 +1,7 @@
 package com.nyasha.module.imp.render
 
 import com.nyasha.gui.clickgui.ClickScreen
+import com.nyasha.gui.testcef.TestMenu
 import com.nyasha.module.Bind
 import com.nyasha.module.Category
 import com.nyasha.module.Module
@@ -26,7 +27,9 @@ object ClickGui : Module(
     override fun onEnable() {
         if (!openned){
             openned = true
-            mc.setScreen(ClickScreen)
+            mc.setScreen(TestMenu)
+            //mc.setScreen(ClickScreen)
+
         }
 
     }
