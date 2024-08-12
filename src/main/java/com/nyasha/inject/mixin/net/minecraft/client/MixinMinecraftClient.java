@@ -10,6 +10,7 @@ import com.nyasha.mcef.internal.MCEFDownloaderMenu;
 import com.nyasha.Nyasha;
 import com.nyasha.events.EventClientTick;
 import com.nyasha.events.EventPreAttack;
+import com.nyasha.server.HttpSeverV3;
 import com.nyasha.util.IMinecraftMixin;
 import com.nyasha.managers.FontManager;
 import net.minecraft.client.MinecraftClient;
@@ -177,6 +178,16 @@ public abstract class MixinMinecraftClient implements IMinecraftMixin {
             MCEFDownloadListener.INSTANCE.setDone(true);
         });
         downloadThread.start();
+
+        Thread.startVirtualThread(()->{
+            try {
+                HttpSeverV3 httpSeverV3 = new HttpSeverV3(8089);
+                httpSeverV3.start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 
 
